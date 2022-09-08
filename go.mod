@@ -1,4 +1,4 @@
-module gotypo
+module github.com/tarumes/gotypo
 
 go 1.19
 
