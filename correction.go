@@ -14,6 +14,12 @@ type Corrections struct {
 	Matches [][]string
 }
 
+type Correction struct {
+	Best string
+	Same []string
+	Rank int
+}
+
 func (c *Client) TypoCorrections(sentence string) Corrections {
 	var result Corrections
 	var splitted []string = strings.Split(space.ReplaceAllString(sentence, " "), " ")
@@ -41,12 +47,6 @@ func (c *Client) TypoCorrections(sentence string) Corrections {
 	return result
 }
 
-type Correction struct {
-	Best string
-	Same []string
-	Rank int
-}
-
 func (c *Client) TypoCorrection(input string) Correction {
 	var result Correction = Correction{
 		Best: input,
@@ -61,10 +61,7 @@ func (c *Client) TypoCorrection(input string) Correction {
 	input = c.strip.ReplaceAllString(input, "")
 
 	for _, v := range c.dictionary.Wordlist {
-		if v == input {
-			result.Best = input
-			result.Rank = 1
-		} else if strings.EqualFold(v, input) {
+		if strings.EqualFold(v, input) {
 			result.Best = v
 			result.Rank = 1
 		}

@@ -11,6 +11,9 @@ import (
 )
 
 func (c *Client) Save(filename string) error {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	if strings.HasSuffix(filename, ".gob") {
 		return goblin.GOBWrite(filename, c.dictionary)
 	}
@@ -27,14 +30,17 @@ func (c *Client) Save(filename string) error {
 		if _, err = f.Write(data); err != nil {
 			return err
 		}
-		f.Close()
-		return nil
+
+		return f.Close()
 	}
 
 	return fmt.Errorf("no valid filetype (.gob, .json) => %s", filename)
 }
 
 func (c *Client) Load(filename string) error {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	if strings.HasSuffix(filename, ".gob") {
 		return goblin.GOBRead(filename, &c.dictionary)
 	}
