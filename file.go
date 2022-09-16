@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/tarumes/goblin"
@@ -43,7 +44,17 @@ func (c *Client) Load(filename string) error {
 		if err != nil {
 			return err
 		}
-		return json.Unmarshal(data, &c.dictionary)
+		err = json.Unmarshal(data, &c.dictionary)
+		if err != nil {
+			return err
+		}
+		re, err := regexp.Compile(c.dictionary.StripFromString)
+		if err != nil {
+			return err
+		}
+		c.strip = *re
+
+		return nil
 	}
 
 	return fmt.Errorf("no valid filetype (.gob, .json) => %s", filename)

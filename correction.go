@@ -6,8 +6,7 @@ import (
 	"sync"
 )
 
-var strip regexp.Regexp = *regexp.MustCompile(`[\.:,;_\-+*!"/()=?\\\]\[]`)
-var space regexp.Regexp = *regexp.MustCompile(`\s+`)
+var space regexp.Regexp = *regexp.MustCompile(`(\s|⠀)+`)
 var numeric regexp.Regexp = *regexp.MustCompile(`(\$|€|)([0-9]{1,}\.[0-9]{1,}|[0-9]{1,})(\$|€|)`)
 
 type Corrections struct {
@@ -59,7 +58,7 @@ func (c *Client) TypoCorrection(input string) Correction {
 		return result
 	}
 
-	input = strip.ReplaceAllString(input, "")
+	input = c.strip.ReplaceAllString(input, "")
 
 	for _, v := range c.dictionary.Wordlist {
 		if v == input {

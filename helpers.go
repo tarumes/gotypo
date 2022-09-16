@@ -48,3 +48,13 @@ func rank(input string, word string, result *Correction) {
 		result.Rank = score
 	}
 }
+
+// return slice position or -1
+func contains(slice []string, search string) int {
+	for i, v := range slice {
+		if v == search {
+			return i
+		}
+	}
+	return -1
+}
